@@ -38,13 +38,17 @@ S500  = S100 + additional400
 S1000 = S500 + additional500
 ```
 
-| 文件 | 数量 | 用途 |
-| --- | ---: | --- |
-| `random100_v1.json.gz` | 100 | 初步检查与方案筛选 |
-| `additional400_v1.json.gz` | 400 | 从 S100 扩到 S500 时新增的样本 |
-| `random500_v1.json.gz` | 500 | 冻结方案后的中等规模评估 |
-| `additional500_v1.json.gz` | 500 | 从 S500 扩到 S1000 时新增的样本 |
-| `random1000_v1.json.gz` | 1000 | 更大规模的效果与成本确认 |
+点击下表中的下载链接，可直接获取对应文件，无需克隆仓库。
+
+| 文件 | 数量 | 用途 | 数据下载 | 样本清单 |
+| --- | ---: | --- | --- | --- |
+| `random100_v1.json.gz` | 100 | 初步检查与方案筛选 | [下载 .json.gz](https://github.com/TingdeLiu/R2R-Steptest/releases/download/dataset-v1/random100_v1.json.gz) | [Manifest](https://github.com/TingdeLiu/R2R-Steptest/releases/download/dataset-v1/random100_v1.manifest.json) |
+| `additional400_v1.json.gz` | 400 | 从 S100 扩到 S500 时新增的样本 | [下载 .json.gz](https://github.com/TingdeLiu/R2R-Steptest/releases/download/dataset-v1/additional400_v1.json.gz) | [Manifest](https://github.com/TingdeLiu/R2R-Steptest/releases/download/dataset-v1/additional400_v1.manifest.json) |
+| `random500_v1.json.gz` | 500 | 冻结方案后的中等规模评估 | [下载 .json.gz](https://github.com/TingdeLiu/R2R-Steptest/releases/download/dataset-v1/random500_v1.json.gz) | [Manifest](https://github.com/TingdeLiu/R2R-Steptest/releases/download/dataset-v1/random500_v1.manifest.json) |
+| `additional500_v1.json.gz` | 500 | 从 S500 扩到 S1000 时新增的样本 | [下载 .json.gz](https://github.com/TingdeLiu/R2R-Steptest/releases/download/dataset-v1/additional500_v1.json.gz) | [Manifest](https://github.com/TingdeLiu/R2R-Steptest/releases/download/dataset-v1/additional500_v1.manifest.json) |
+| `random1000_v1.json.gz` | 1000 | 更大规模的效果与成本确认 | [下载 .json.gz](https://github.com/TingdeLiu/R2R-Steptest/releases/download/dataset-v1/random1000_v1.json.gz) | [Manifest](https://github.com/TingdeLiu/R2R-Steptest/releases/download/dataset-v1/random1000_v1.manifest.json) |
+
+配套文件：[SHA256SUMS](https://github.com/TingdeLiu/R2R-Steptest/releases/download/dataset-v1/SHA256SUMS) · [generation_plan.json](https://github.com/TingdeLiu/R2R-Steptest/releases/download/dataset-v1/generation_plan.json)
 
 每份数据都有对应的 `*.manifest.json`，记录样本标识、源文件索引和文件哈希。`generation_plan.json` 记录生成参数，`SHA256SUMS` 用于核对下载文件。
 

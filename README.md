@@ -38,13 +38,17 @@ S500  = S100 + additional400
 S1000 = S500 + additional500
 ```
 
-| File | Episodes | Purpose |
-| --- | ---: | --- |
-| `random100_v1.json.gz` | 100 | Initial checks and candidate screening |
-| `additional400_v1.json.gz` | 400 | New episodes when expanding from S100 to S500 |
-| `random500_v1.json.gz` | 500 | Intermediate evaluation after freezing the protocol |
-| `additional500_v1.json.gz` | 500 | New episodes when expanding from S500 to S1000 |
-| `random1000_v1.json.gz` | 1000 | Larger-scale confirmation of effectiveness and cost |
+Download individual files directly from the table below; cloning the repository is optional.
+
+| File | Episodes | Purpose | Download | Manifest |
+| --- | ---: | --- | --- | --- |
+| `random100_v1.json.gz` | 100 | Initial checks and candidate screening | [Download .json.gz](https://github.com/TingdeLiu/R2R-Steptest/releases/download/dataset-v1/random100_v1.json.gz) | [Manifest](https://github.com/TingdeLiu/R2R-Steptest/releases/download/dataset-v1/random100_v1.manifest.json) |
+| `additional400_v1.json.gz` | 400 | New episodes when expanding from S100 to S500 | [Download .json.gz](https://github.com/TingdeLiu/R2R-Steptest/releases/download/dataset-v1/additional400_v1.json.gz) | [Manifest](https://github.com/TingdeLiu/R2R-Steptest/releases/download/dataset-v1/additional400_v1.manifest.json) |
+| `random500_v1.json.gz` | 500 | Intermediate evaluation after freezing the protocol | [Download .json.gz](https://github.com/TingdeLiu/R2R-Steptest/releases/download/dataset-v1/random500_v1.json.gz) | [Manifest](https://github.com/TingdeLiu/R2R-Steptest/releases/download/dataset-v1/random500_v1.manifest.json) |
+| `additional500_v1.json.gz` | 500 | New episodes when expanding from S500 to S1000 | [Download .json.gz](https://github.com/TingdeLiu/R2R-Steptest/releases/download/dataset-v1/additional500_v1.json.gz) | [Manifest](https://github.com/TingdeLiu/R2R-Steptest/releases/download/dataset-v1/additional500_v1.manifest.json) |
+| `random1000_v1.json.gz` | 1000 | Larger-scale confirmation of effectiveness and cost | [Download .json.gz](https://github.com/TingdeLiu/R2R-Steptest/releases/download/dataset-v1/random1000_v1.json.gz) | [Manifest](https://github.com/TingdeLiu/R2R-Steptest/releases/download/dataset-v1/random1000_v1.manifest.json) |
+
+Supporting files: [SHA256SUMS](https://github.com/TingdeLiu/R2R-Steptest/releases/download/dataset-v1/SHA256SUMS) · [generation_plan.json](https://github.com/TingdeLiu/R2R-Steptest/releases/download/dataset-v1/generation_plan.json)
 
 Each dataset has a corresponding `*.manifest.json` containing episode identifiers, source indices, and file hashes. `generation_plan.json` records generation parameters; `SHA256SUMS` verifies downloaded files.
 
