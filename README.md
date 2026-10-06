@@ -4,7 +4,7 @@
 
 先用 100 条验证方案，再扩到 500 条和 1000 条。每一级保留上一级的全部样本，便于复用符合审计要求的结果、减少重复评估成本。
 
-[下载 dataset-v1](https://github.com/TingdeLiu/R2R-Steptest/releases/tag/dataset-v1) · [查看数据文件](datasets/releases/dataset-v1/) · [完整设计方案](阶梯样本评估与独立GitHub项目方案.md)
+[下载 dataset-v1](https://github.com/TingdeLiu/R2R-Steptest/releases/tag/dataset-v1) · [查看数据文件](datasets/releases/dataset-v1/)
 
 ## 当前进度
 
@@ -149,7 +149,6 @@ python -m ladder.cli report --directory datasets/releases/dataset-v1 --b0 artifa
 
 | 内容 | 入口 |
 | --- | --- |
-| 完整设计与冻结要求 | [项目方案](阶梯样本评估与独立GitHub项目方案.md) |
 | 阶梯执行协议 | [ladder_v1.md](protocols/ladder_v1.md) |
 | B0 / candidate 配对规则 | [b0_candidate_pairing.md](protocols/b0_candidate_pairing.md) |
 | Token 预算口径 | [token_budget.md](protocols/token_budget.md) |
