@@ -2,9 +2,13 @@
 
 **English** | [中文](README_CN.md)
 
-**Nested 100 → 500 → 1000 episode subsets for VLN-CE navigation evaluation, with generation, auditing, and paired reporting tools.**
+**Nested 100 → 500 → 1000 episode evaluation datasets for developing zero-shot vision-and-language navigation (VLN) systems powered by large-model API calls.**
 
-Start with 100 episodes to validate a candidate, then expand to 500 and 1000. Each stage retains every episode from the previous stage, allowing audited results to be reused and reducing repeated evaluation costs.
+During development, these systems often send navigation instructions, visual observations, and history to a model repeatedly to decide the next action. A single trajectory can involve many API calls. Repeatedly tuning prompts, decision logic, or controllers and evaluating at scale can consume substantial tokens, increasing both cost and turnaround time.
+
+R2R-Steptest is designed to expand testing, optimization, and evaluation progressively: use a small smoke subset to check integration and validate an idea, screen candidates on 100 episodes, then expand to 500 and 1000 after freezing the protocol to assess effectiveness and cost. Each stage includes every episode from the previous stage. When inputs, protocol, and hashes satisfy reuse requirements, only the new episodes need to be evaluated, reducing repeated API calls.
+
+The project provides staged VLN-CE datasets, generation and auditing tools, and paired reports to help developers iterate on zero-shot VLN systems within a token budget.
 
 [Download dataset-v1](https://github.com/TingdeLiu/R2R-Steptest/releases/tag/dataset-v1) · [Browse dataset files](datasets/releases/dataset-v1/)
 
