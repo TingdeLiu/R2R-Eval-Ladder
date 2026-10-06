@@ -13,6 +13,11 @@ class LadderTests(unittest.TestCase):
             kwargs = dict(source_path=p/'source.json.gz', parent100=p/'p1.json.gz',parent500=p/'p2.json.gz',expected_sha=sha(p/'source.json.gz'),counts=(3,9,15),check_parent_hash=False)
             generate(out=p/'a',**kwargs)
             generate(out=p/'b',**kwargs)
+            plan = read(p/'a/generation_plan.json')
+            self.assertEqual(plan['source_dataset'], 'source.json.gz')
+            self.assertEqual([x['path'] for x in plan['parent_datasets']], ['p1.json.gz', 'p2.json.gz'])
+            self.assertNotIn(str(p), plan['source_dataset'])
+            with self.assertRaises(ValueError): generate(out=p/'leak', source_label=str(p/'source.json.gz'), **kwargs)
             self.assertEqual(sha(p/'a/random15_v1.json.gz'),sha(p/'b/random15_v1.json.gz'))
             a,b,c = [set(index(read(p/f'a/random{n}_v1.json.gz')['episodes'])) for n in (3,9,15)]
             self.assertTrue(a < b < c)

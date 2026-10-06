@@ -11,6 +11,10 @@ def main():
         gen.add_argument('--'+name, required=True)
     gen.add_argument('--seed', type=int, default=20261006)
     gen.add_argument('--holdout')
+    gen.add_argument('--source-label')
+    gen.add_argument('--parent100-label')
+    gen.add_argument('--parent500-label')
+    gen.add_argument('--holdout-label')
     audit = sub.add_parser('audit')
     audit.add_argument('--directory', required=True)
     audit.add_argument('--source', required=True)
@@ -24,7 +28,11 @@ def main():
     stage.add_argument('--execute', action='store_true')
     args = parser.parse_args()
     if args.command == 'generate':
-        generate(args.source, args.parent100, args.parent500, args.out, args.seed, holdout=args.holdout)
+        generate(args.source, args.parent100, args.parent500, args.out, args.seed, holdout=args.holdout,
+                 source_label=args.source_label,
+                 parent_labels=[args.parent100_label or Path(args.parent100).name,
+                                args.parent500_label or Path(args.parent500).name],
+                 holdout_label=args.holdout_label)
     elif args.command == 'audit':
         directory = Path(args.directory)
         source = index(read(args.source)['episodes'])

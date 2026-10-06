@@ -48,7 +48,14 @@ def validate_subset(source, rows, count=None):
             raise ValueError(f'Episode differs from source: {k}')
     return subset
 
-def generate(source_path, parent100, parent500, out, seed=20261006, expected_sha=SOURCE_SHA, counts=(100, 500, 1000), check_parent_hash=True, holdout=None):
+def logical_label(value, fallback):
+    """Return a single relative label suitable for a published manifest."""
+    label = str(value) if value else Path(fallback).name
+    if not label or label in ('.', '..') or '/' in label or '\\' in label or Path(label).name != label:
+        raise ValueError('Dataset labels must be single relative names')
+    return label
+
+def generate(source_path, parent100, parent500, out, seed=20261006, expected_sha=SOURCE_SHA, counts=(100, 500, 1000), check_parent_hash=True, holdout=None, source_label=None, parent_labels=None, holdout_label=None):
     if sha(source_path) != expected_sha:
         raise ValueError('Source SHA-256 mismatch')
     source = read(source_path)
@@ -74,9 +81,16 @@ def generate(source_path, parent100, parent500, out, seed=20261006, expected_sha
     validate_subset(source_index, combined, counts[2])
     out = Path(out)
     # Record seed and inputs before producing outputs.
-    plan = {'version': 'nested_random_episode_subset_v1', 'seed': seed, 'source_dataset': str(source_path), 'source_sha256': expected_sha,
-            'parent_datasets': [{'path': str(p), 'count': n, 'sha256': sha(p)} for p, n in zip(paths, counts[:2])],
-            'holdout_sha256': sha(holdout) if holdout else None}
+    source_label = logical_label(source_label, source_path)
+    raw_labels = parent_labels if parent_labels is not None else [Path(p).name for p in paths]
+    labels = [logical_label(label, path) for label, path in zip(raw_labels, paths)]
+    if len(labels) != 2:
+        raise ValueError('parent_labels must contain exactly two labels')
+    plan = {'version': 'nested_random_episode_subset_v1', 'seed': seed,
+            'source_dataset': source_label, 'source_sha256': expected_sha,
+            'parent_datasets': [{'path': label, 'count': n, 'sha256': sha(p)} for p, n, label in zip(paths, counts[:2], labels)],
+            'holdout_sha256': sha(holdout) if holdout else None,
+            'holdout_dataset': logical_label(holdout_label, holdout) if holdout else None}
     write(out / 'generation_plan.json', plan)
     groups = {f'random{counts[0]}_v1': parents[0]['episodes'], f'random{counts[1]}_v1': parents[1]['episodes'],
               f'additional{counts[1]-counts[0]}_v1': [r for r in parents[1]['episodes'] if key(r) not in maps[0]],
