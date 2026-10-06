@@ -1,5 +1,5 @@
 {
-  "status": "local_generation_verified_not_published",
+  "status": "dataset_v1_published",
   "source_sha256": "0e4fddca056d2e012ecc52f43a259ebddb1128503a7767b5da3b5af8ea8cf653",
   "parent_sha256": {
     "100": "3b80bf55c1c070e92f796a04f26f848a500acb41365d4fdb2fe6e502a4036fea",
@@ -11,5 +11,7 @@
   "additional500_output_sha256": "7917f19ed354afc9f516b7e2a6c2b41ddd06e7dce8b5d228d85fdd78f6838ddb",
   "generation_protocol": "nested_random_episode_subset_v1",
   "navigation_evaluation": "not_run",
-  "dataset_v1_published": false
+  "dataset_v1_published": true,
+  "dataset_v1_tag": "dataset-v1",
+  "dataset_v1_path": "datasets/releases/dataset-v1"
 }

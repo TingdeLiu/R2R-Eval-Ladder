@@ -20,7 +20,7 @@ python -m ladder.cli report --directory artifacts/dataset-v1 --b0 artifacts/b0.j
 
 数据下载与 Habitat 环境配置见 [VLN-CE 官方仓库](https://github.com/jacobkrantz/VLN-CE#data)。本项目实现评估协议工具，不包含 Habitat、模型 checkpoint、Matterport3D 场景或 Agent。真实导航运行需要用户提供冻结的外部执行命令与环境。
 
-datasets/manifests/source_registry.json 记录已知哈希与发布状态。当前已用匹配这些哈希的真实源数据和冻结父集合完成本地 S1000 生成与完整审计，结果数量为 1000；生成文件保持在本地，不发布数据集文件，也不创建 dataset-v1 tag。当前提交只发布协议工具、生成状态和可复现校验信息，S1000 导航评估尚未运行。生成计划只记录逻辑文件名，避免把本机绝对路径写入公开 manifest；protocol-v1 固定协议工具。
+datasets/manifests/source_registry.json 记录已知哈希与发布状态。已用匹配这些哈希的真实源数据和冻结父集合完成 S1000 生成与完整审计；完整数据、manifest、生成计划和校验和位于 [dataset-v1 发布目录](datasets/releases/dataset-v1/)，并由 `dataset-v1` tag 固定。S1000 导航评估尚未运行。生成计划只记录逻辑文件名，避免把本机绝对路径写入公开 manifest；protocol-v1 固定协议工具。
 
 结果文件是 JSON 数组，每行包含 scene_id、episode_id、sr、spl、os、ne、steps。SR/OS 为 0 或 1；SPL 为 [0,1]。报告输出 original100、additional400、additional500、combined500、combined1000 的配对均值、gain/loss、成功保持率和配对 bootstrap 差值 95% 区间。累计集合不能作为独立重复实验；NE/steps 差值下降通常表示改善。
 
