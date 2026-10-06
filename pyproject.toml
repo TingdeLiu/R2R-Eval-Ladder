@@ -3,13 +3,15 @@ requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "r2r-steptest"
+name = "r2r-eval-ladder"
 version = "0.1.0"
 description = "Frozen nested VLN-CE evaluation ladders"
 requires-python = ">=3.10"
 dependencies = []
 
 [project.scripts]
+r2r-eval-ladder = "ladder.cli:main"
+# Retain the original command for existing installations.
 r2r-steptest = "ladder.cli:main"
 
 [tool.setuptools.packages.find]

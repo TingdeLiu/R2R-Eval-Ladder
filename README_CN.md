@@ -1,4 +1,4 @@
-# R2R-Steptest
+# R2R-Eval-Ladder
 
 [English](README.md) | **中文**
 
@@ -6,11 +6,11 @@
 
 开发这类导航系统时，模型通常需要多次接收导航指令、视觉观测和历史信息，再作出行动决策。一条轨迹就可能涉及多次 API 调用；反复调整 prompt、决策逻辑或控制器并进行大规模评估，会消耗大量 token，增加费用和等待时间。
 
-R2R-Steptest 的主要目的，是让测试、优化和评估能够按需逐步扩大：先用小样本检查接线和验证思路，再用 100 条筛选方案，方案冻结后扩到 500 条和 1000 条，确认效果与成本。每一级都包含上一级的全部样本；在输入、协议与哈希满足复用条件时，只需评估新增样本，减少重复调用。
+R2R-Eval-Ladder 的主要目的，是让测试、优化和评估能够按需逐步扩大：先用小样本检查接线和验证思路，再用 100 条筛选方案，方案冻结后扩到 500 条和 1000 条，确认效果与成本。每一级都包含上一级的全部样本；在输入、协议与哈希满足复用条件时，只需评估新增样本，减少重复调用。
 
 项目提供 VLN-CE 阶梯数据集，以及生成、审计和配对报告工具，帮助开发者在 token 预算内迭代 zero-shot VLN 系统。
 
-[下载 dataset-v1](https://github.com/TingdeLiu/R2R-Steptest/releases/tag/dataset-v1) · [查看数据文件](datasets/releases/dataset-v1/)
+[下载 dataset-v1](https://github.com/TingdeLiu/R2R-Eval-Ladder/releases/tag/dataset-v1) · [查看数据文件](datasets/releases/dataset-v1/)
 
 ## 目录
 
@@ -46,13 +46,13 @@ S1000 = S500 + additional500
 
 | 文件 | 数量 | 用途 | 数据下载 | 样本清单 |
 | --- | ---: | --- | --- | --- |
-| `random100_v1.json.gz` | 100 | 初步检查与方案筛选 | [下载 .json.gz](https://github.com/TingdeLiu/R2R-Steptest/releases/download/dataset-v1/random100_v1.json.gz) | [Manifest](https://github.com/TingdeLiu/R2R-Steptest/releases/download/dataset-v1/random100_v1.manifest.json) |
-| `additional400_v1.json.gz` | 400 | 从 S100 扩到 S500 时新增的样本 | [下载 .json.gz](https://github.com/TingdeLiu/R2R-Steptest/releases/download/dataset-v1/additional400_v1.json.gz) | [Manifest](https://github.com/TingdeLiu/R2R-Steptest/releases/download/dataset-v1/additional400_v1.manifest.json) |
-| `random500_v1.json.gz` | 500 | 冻结方案后的中等规模评估 | [下载 .json.gz](https://github.com/TingdeLiu/R2R-Steptest/releases/download/dataset-v1/random500_v1.json.gz) | [Manifest](https://github.com/TingdeLiu/R2R-Steptest/releases/download/dataset-v1/random500_v1.manifest.json) |
-| `additional500_v1.json.gz` | 500 | 从 S500 扩到 S1000 时新增的样本 | [下载 .json.gz](https://github.com/TingdeLiu/R2R-Steptest/releases/download/dataset-v1/additional500_v1.json.gz) | [Manifest](https://github.com/TingdeLiu/R2R-Steptest/releases/download/dataset-v1/additional500_v1.manifest.json) |
-| `random1000_v1.json.gz` | 1000 | 更大规模的效果与成本确认 | [下载 .json.gz](https://github.com/TingdeLiu/R2R-Steptest/releases/download/dataset-v1/random1000_v1.json.gz) | [Manifest](https://github.com/TingdeLiu/R2R-Steptest/releases/download/dataset-v1/random1000_v1.manifest.json) |
+| `random100_v1.json.gz` | 100 | 初步检查与方案筛选 | [下载 .json.gz](https://github.com/TingdeLiu/R2R-Eval-Ladder/releases/download/dataset-v1/random100_v1.json.gz) | [Manifest](https://github.com/TingdeLiu/R2R-Eval-Ladder/releases/download/dataset-v1/random100_v1.manifest.json) |
+| `additional400_v1.json.gz` | 400 | 从 S100 扩到 S500 时新增的样本 | [下载 .json.gz](https://github.com/TingdeLiu/R2R-Eval-Ladder/releases/download/dataset-v1/additional400_v1.json.gz) | [Manifest](https://github.com/TingdeLiu/R2R-Eval-Ladder/releases/download/dataset-v1/additional400_v1.manifest.json) |
+| `random500_v1.json.gz` | 500 | 冻结方案后的中等规模评估 | [下载 .json.gz](https://github.com/TingdeLiu/R2R-Eval-Ladder/releases/download/dataset-v1/random500_v1.json.gz) | [Manifest](https://github.com/TingdeLiu/R2R-Eval-Ladder/releases/download/dataset-v1/random500_v1.manifest.json) |
+| `additional500_v1.json.gz` | 500 | 从 S500 扩到 S1000 时新增的样本 | [下载 .json.gz](https://github.com/TingdeLiu/R2R-Eval-Ladder/releases/download/dataset-v1/additional500_v1.json.gz) | [Manifest](https://github.com/TingdeLiu/R2R-Eval-Ladder/releases/download/dataset-v1/additional500_v1.manifest.json) |
+| `random1000_v1.json.gz` | 1000 | 更大规模的效果与成本确认 | [下载 .json.gz](https://github.com/TingdeLiu/R2R-Eval-Ladder/releases/download/dataset-v1/random1000_v1.json.gz) | [Manifest](https://github.com/TingdeLiu/R2R-Eval-Ladder/releases/download/dataset-v1/random1000_v1.manifest.json) |
 
-配套文件：[SHA256SUMS](https://github.com/TingdeLiu/R2R-Steptest/releases/download/dataset-v1/SHA256SUMS) · [generation_plan.json](https://github.com/TingdeLiu/R2R-Steptest/releases/download/dataset-v1/generation_plan.json)
+配套文件：[SHA256SUMS](https://github.com/TingdeLiu/R2R-Eval-Ladder/releases/download/dataset-v1/SHA256SUMS) · [generation_plan.json](https://github.com/TingdeLiu/R2R-Eval-Ladder/releases/download/dataset-v1/generation_plan.json)
 
 每份数据都有对应的 `*.manifest.json`，记录样本标识、源文件索引和文件哈希。`generation_plan.json` 记录生成参数，`SHA256SUMS` 用于核对下载文件。
 
@@ -63,12 +63,12 @@ S1000 = S500 + additional500
 需要 **Python 3.10 或更高版本**。本仓库工具仅使用 Python 标准库。
 
 ```sh
-git clone https://github.com/TingdeLiu/R2R-Steptest.git
-cd R2R-Steptest
+git clone https://github.com/TingdeLiu/R2R-Eval-Ladder.git
+cd R2R-Eval-Ladder
 git checkout dataset-v1
 ```
 
-数据已包含在 `datasets/releases/dataset-v1/`，也可以从 [Release 页面](https://github.com/TingdeLiu/R2R-Steptest/releases/tag/dataset-v1) 单独下载。
+数据已包含在 `datasets/releases/dataset-v1/`，也可以从 [Release 页面](https://github.com/TingdeLiu/R2R-Eval-Ladder/releases/tag/dataset-v1) 单独下载。
 
 查看 S100 的样本数量：
 

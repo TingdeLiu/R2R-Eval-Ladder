@@ -1,4 +1,4 @@
-# R2R-Steptest
+# R2R-Eval-Ladder
 
 **English** | [中文](README_CN.md)
 
@@ -6,11 +6,11 @@
 
 During development, these systems often send navigation instructions, visual observations, and history to a model repeatedly to decide the next action. A single trajectory can involve many API calls. Repeatedly tuning prompts, decision logic, or controllers and evaluating at scale can consume substantial tokens, increasing both cost and turnaround time.
 
-R2R-Steptest is designed to expand testing, optimization, and evaluation progressively: use a small smoke subset to check integration and validate an idea, screen candidates on 100 episodes, then expand to 500 and 1000 after freezing the protocol to assess effectiveness and cost. Each stage includes every episode from the previous stage. When inputs, protocol, and hashes satisfy reuse requirements, only the new episodes need to be evaluated, reducing repeated API calls.
+R2R-Eval-Ladder is designed to expand testing, optimization, and evaluation progressively: use a small smoke subset to check integration and validate an idea, screen candidates on 100 episodes, then expand to 500 and 1000 after freezing the protocol to assess effectiveness and cost. Each stage includes every episode from the previous stage. When inputs, protocol, and hashes satisfy reuse requirements, only the new episodes need to be evaluated, reducing repeated API calls.
 
 The project provides staged VLN-CE datasets, generation and auditing tools, and paired reports to help developers iterate on zero-shot VLN systems within a token budget.
 
-[Download dataset-v1](https://github.com/TingdeLiu/R2R-Steptest/releases/tag/dataset-v1) · [Browse dataset files](datasets/releases/dataset-v1/)
+[Download dataset-v1](https://github.com/TingdeLiu/R2R-Eval-Ladder/releases/tag/dataset-v1) · [Browse dataset files](datasets/releases/dataset-v1/)
 
 ## Contents
 
@@ -46,13 +46,13 @@ Download individual files directly from the table below; cloning the repository 
 
 | File | Episodes | Purpose | Download | Manifest |
 | --- | ---: | --- | --- | --- |
-| `random100_v1.json.gz` | 100 | Initial checks and candidate screening | [Download .json.gz](https://github.com/TingdeLiu/R2R-Steptest/releases/download/dataset-v1/random100_v1.json.gz) | [Manifest](https://github.com/TingdeLiu/R2R-Steptest/releases/download/dataset-v1/random100_v1.manifest.json) |
-| `additional400_v1.json.gz` | 400 | New episodes when expanding from S100 to S500 | [Download .json.gz](https://github.com/TingdeLiu/R2R-Steptest/releases/download/dataset-v1/additional400_v1.json.gz) | [Manifest](https://github.com/TingdeLiu/R2R-Steptest/releases/download/dataset-v1/additional400_v1.manifest.json) |
-| `random500_v1.json.gz` | 500 | Intermediate evaluation after freezing the protocol | [Download .json.gz](https://github.com/TingdeLiu/R2R-Steptest/releases/download/dataset-v1/random500_v1.json.gz) | [Manifest](https://github.com/TingdeLiu/R2R-Steptest/releases/download/dataset-v1/random500_v1.manifest.json) |
-| `additional500_v1.json.gz` | 500 | New episodes when expanding from S500 to S1000 | [Download .json.gz](https://github.com/TingdeLiu/R2R-Steptest/releases/download/dataset-v1/additional500_v1.json.gz) | [Manifest](https://github.com/TingdeLiu/R2R-Steptest/releases/download/dataset-v1/additional500_v1.manifest.json) |
-| `random1000_v1.json.gz` | 1000 | Larger-scale confirmation of effectiveness and cost | [Download .json.gz](https://github.com/TingdeLiu/R2R-Steptest/releases/download/dataset-v1/random1000_v1.json.gz) | [Manifest](https://github.com/TingdeLiu/R2R-Steptest/releases/download/dataset-v1/random1000_v1.manifest.json) |
+| `random100_v1.json.gz` | 100 | Initial checks and candidate screening | [Download .json.gz](https://github.com/TingdeLiu/R2R-Eval-Ladder/releases/download/dataset-v1/random100_v1.json.gz) | [Manifest](https://github.com/TingdeLiu/R2R-Eval-Ladder/releases/download/dataset-v1/random100_v1.manifest.json) |
+| `additional400_v1.json.gz` | 400 | New episodes when expanding from S100 to S500 | [Download .json.gz](https://github.com/TingdeLiu/R2R-Eval-Ladder/releases/download/dataset-v1/additional400_v1.json.gz) | [Manifest](https://github.com/TingdeLiu/R2R-Eval-Ladder/releases/download/dataset-v1/additional400_v1.manifest.json) |
+| `random500_v1.json.gz` | 500 | Intermediate evaluation after freezing the protocol | [Download .json.gz](https://github.com/TingdeLiu/R2R-Eval-Ladder/releases/download/dataset-v1/random500_v1.json.gz) | [Manifest](https://github.com/TingdeLiu/R2R-Eval-Ladder/releases/download/dataset-v1/random500_v1.manifest.json) |
+| `additional500_v1.json.gz` | 500 | New episodes when expanding from S500 to S1000 | [Download .json.gz](https://github.com/TingdeLiu/R2R-Eval-Ladder/releases/download/dataset-v1/additional500_v1.json.gz) | [Manifest](https://github.com/TingdeLiu/R2R-Eval-Ladder/releases/download/dataset-v1/additional500_v1.manifest.json) |
+| `random1000_v1.json.gz` | 1000 | Larger-scale confirmation of effectiveness and cost | [Download .json.gz](https://github.com/TingdeLiu/R2R-Eval-Ladder/releases/download/dataset-v1/random1000_v1.json.gz) | [Manifest](https://github.com/TingdeLiu/R2R-Eval-Ladder/releases/download/dataset-v1/random1000_v1.manifest.json) |
 
-Supporting files: [SHA256SUMS](https://github.com/TingdeLiu/R2R-Steptest/releases/download/dataset-v1/SHA256SUMS) · [generation_plan.json](https://github.com/TingdeLiu/R2R-Steptest/releases/download/dataset-v1/generation_plan.json)
+Supporting files: [SHA256SUMS](https://github.com/TingdeLiu/R2R-Eval-Ladder/releases/download/dataset-v1/SHA256SUMS) · [generation_plan.json](https://github.com/TingdeLiu/R2R-Eval-Ladder/releases/download/dataset-v1/generation_plan.json)
 
 Each dataset has a corresponding `*.manifest.json` containing episode identifiers, source indices, and file hashes. `generation_plan.json` records generation parameters; `SHA256SUMS` verifies downloaded files.
 
@@ -63,12 +63,12 @@ Episode identity is **`(scene_id, episode_id)`**, not `episode_id` alone. These 
 Requires **Python 3.10 or later**. The tools use only the Python standard library.
 
 ```sh
-git clone https://github.com/TingdeLiu/R2R-Steptest.git
-cd R2R-Steptest
+git clone https://github.com/TingdeLiu/R2R-Eval-Ladder.git
+cd R2R-Eval-Ladder
 git checkout dataset-v1
 ```
 
-The data is included in `datasets/releases/dataset-v1/`. Individual files are also available on the [Release page](https://github.com/TingdeLiu/R2R-Steptest/releases/tag/dataset-v1).
+The data is included in `datasets/releases/dataset-v1/`. Individual files are also available on the [Release page](https://github.com/TingdeLiu/R2R-Eval-Ladder/releases/tag/dataset-v1).
 
 Check the number of episodes in S100:
 
