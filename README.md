@@ -1,25 +1,36 @@
 # R2R-Steptest
 
-**用于 VLN-CE 导航评估的 100 → 500 → 1000 条嵌套样本集，以及生成、校验和配对报告工具。**
+**English** | [中文](README_CN.md)
 
-先用 100 条验证方案，再扩到 500 条和 1000 条。每一级保留上一级的全部样本，便于复用符合审计要求的结果、减少重复评估成本。
+**Nested 100 → 500 → 1000 episode subsets for VLN-CE navigation evaluation, with generation, auditing, and paired reporting tools.**
 
-[下载 dataset-v1](https://github.com/TingdeLiu/R2R-Steptest/releases/tag/dataset-v1) · [查看数据文件](datasets/releases/dataset-v1/)
+Start with 100 episodes to validate a candidate, then expand to 500 and 1000. Each stage retains every episode from the previous stage, allowing audited results to be reused and reducing repeated evaluation costs.
 
-## 当前进度
+[Download dataset-v1](https://github.com/TingdeLiu/R2R-Steptest/releases/tag/dataset-v1) · [Browse dataset files](datasets/releases/dataset-v1/)
 
-| 项目 | 状态 |
+## Contents
+
+- [Current status](#current-status)
+- [Choosing a subset](#choosing-a-subset)
+- [Quick start](#quick-start-use-the-published-dataset)
+- [Reproduce and audit the dataset](#reproduce-and-audit-the-dataset)
+- [Run navigation evaluations](#run-navigation-evaluations)
+- [Documentation and development](#documentation-and-development)
+
+## Current status
+
+| Item | Status |
 | --- | --- |
-| S100 / S500 / S1000 数据集 | 已生成并发布为 `dataset-v1` |
-| 数据文件、样本清单与 SHA-256 | 已发布，可下载校验 |
-| 生成器、审计、阶段预检、配对报告工具 | 已提供 |
-| S1000 真实导航评估与模型成绩 | **尚未运行，暂无评估结果** |
+| S100 / S500 / S1000 datasets | Generated and published as `dataset-v1` |
+| Data files, episode manifests, and SHA-256 checksums | Available for download and verification |
+| Generator, audits, stage preflight, and paired reporting | Available |
+| S1000 navigation evaluation and model scores | **Not yet run; no evaluation results available** |
 
-本项目提供评估数据和工具。运行导航模型还需要自行准备 Habitat 环境、Matterport3D 场景、模型 checkpoint 和评估执行程序；安装与下载说明见 [VLN-CE 官方仓库](https://github.com/jacobkrantz/VLN-CE#data)。
+This project provides evaluation data and tools. To run a navigation model, prepare a Habitat environment, Matterport3D scenes, a model checkpoint, and an evaluation program. See the [official VLN-CE repository](https://github.com/jacobkrantz/VLN-CE#data) for setup and download instructions.
 
-## 数据集怎么选
+## Choosing a subset
 
-所有样本来自同一个冻结版本的 `val_unseen`，满足：
+All episodes come from the same frozen version of `val_unseen`:
 
 ```text
 S100 ⊂ S500 ⊂ S1000
@@ -27,21 +38,21 @@ S500  = S100 + additional400
 S1000 = S500 + additional500
 ```
 
-| 文件 | 数量 | 用途 |
+| File | Episodes | Purpose |
 | --- | ---: | --- |
-| `random100_v1.json.gz` | 100 | 初步检查与方案筛选 |
-| `additional400_v1.json.gz` | 400 | 从 S100 扩到 S500 时新增的样本 |
-| `random500_v1.json.gz` | 500 | 冻结方案后的中等规模评估 |
-| `additional500_v1.json.gz` | 500 | 从 S500 扩到 S1000 时新增的样本 |
-| `random1000_v1.json.gz` | 1000 | 更大规模的效果与成本确认 |
+| `random100_v1.json.gz` | 100 | Initial checks and candidate screening |
+| `additional400_v1.json.gz` | 400 | New episodes when expanding from S100 to S500 |
+| `random500_v1.json.gz` | 500 | Intermediate evaluation after freezing the protocol |
+| `additional500_v1.json.gz` | 500 | New episodes when expanding from S500 to S1000 |
+| `random1000_v1.json.gz` | 1000 | Larger-scale confirmation of effectiveness and cost |
 
-每份数据都有对应的 `*.manifest.json`，记录样本标识、源文件索引和文件哈希。`generation_plan.json` 记录生成参数，`SHA256SUMS` 用于核对下载文件。
+Each dataset has a corresponding `*.manifest.json` containing episode identifiers, source indices, and file hashes. `generation_plan.json` records generation parameters; `SHA256SUMS` verifies downloaded files.
 
-样本身份使用 **`(scene_id, episode_id)`**，不能只用 `episode_id`。这些集合用于阶梯测试和工程决策；如需独立泛化验证，应另设不参与调参且不重叠的 holdout。
+Episode identity is **`(scene_id, episode_id)`**, not `episode_id` alone. These subsets support staged testing and engineering decisions. Independent generalization evaluation requires a separate, non-overlapping holdout that is excluded from tuning.
 
-## 快速开始：直接使用已发布数据
+## Quick start: use the published dataset
 
-需要 **Python 3.10 或更高版本**。本仓库工具仅使用 Python 标准库。
+Requires **Python 3.10 or later**. The tools use only the Python standard library.
 
 ```sh
 git clone https://github.com/TingdeLiu/R2R-Steptest.git
@@ -49,17 +60,17 @@ cd R2R-Steptest
 git checkout dataset-v1
 ```
 
-数据已包含在 `datasets/releases/dataset-v1/`，也可以从 [Release 页面](https://github.com/TingdeLiu/R2R-Steptest/releases/tag/dataset-v1) 单独下载。
+The data is included in `datasets/releases/dataset-v1/`. Individual files are also available on the [Release page](https://github.com/TingdeLiu/R2R-Steptest/releases/tag/dataset-v1).
 
-查看 S100 的样本数量：
+Check the number of episodes in S100:
 
 ```sh
 python -c "import gzip,json; p='datasets/releases/dataset-v1/random100_v1.json.gz'; print(len(json.load(gzip.open(p,'rt',encoding='utf-8'))['episodes']))"
 ```
 
-预期输出 `100`。随后将所需 `.json.gz` 文件配置为导航评估程序的数据输入；具体配置项取决于使用的模型项目。
+Expected output: `100`. Configure your navigation evaluation program to use the desired `.json.gz` file as its dataset input. The configuration field depends on the model project.
 
-Linux / WSL 下校验全部发布文件：
+Verify all published files on Linux / WSL:
 
 ```sh
 cd datasets/releases/dataset-v1
@@ -67,102 +78,102 @@ sha256sum -c SHA256SUMS
 cd ../../..
 ```
 
-文件校验确认下载内容与发布版本一致；与原始源数据逐条核对还需要下面的 `audit` 命令。
+Checksum verification confirms that downloaded files match the published version. Comparing every episode against the original source additionally requires the `audit` command below.
 
-## 复现生成与数据审计
+## Reproduce and audit the dataset
 
-复现需要以下三个**原始冻结文件**，放在本地 `data/` 目录：
+Place these three **original frozen files** in your local `data/` directory:
 
-- `val_unseen.json.gz`：原始源数据；
-- `start_heading_random100_v1.json.gz`：原始冻结 S100；
-- `start_heading_random500_v1.json.gz`：原始冻结 S500。
+- `val_unseen.json.gz`: the original source dataset;
+- `start_heading_random100_v1.json.gz`: the original frozen S100;
+- `start_heading_random500_v1.json.gz`: the original frozen S500.
 
-输入 SHA-256 必须与 [源数据登记表](datasets/manifests/source_registry.json) 一致。发布的 `random100_v1.json.gz` / `random500_v1.json.gz` 经过稳定排序和重新压缩，**不能直接替代要求原始文件哈希的父输入**。
+Input SHA-256 hashes must match the [source registry](datasets/manifests/source_registry.json). The published `random100_v1.json.gz` / `random500_v1.json.gz` files have been sorted and recompressed; **they cannot directly replace parent inputs whose original file hashes are required**.
 
-在仓库根目录运行（每条命令均为一行，可用于 PowerShell 或 Bash）：
+Run from the repository root. Each command is a single line and works in PowerShell or Bash:
 
 ```sh
 python -m ladder.cli generate --source data/val_unseen.json.gz --parent100 data/start_heading_random100_v1.json.gz --parent500 data/start_heading_random500_v1.json.gz --out artifacts/dataset-v1 --seed 20261006
 python -m ladder.cli audit --source data/val_unseen.json.gz --directory artifacts/dataset-v1
 ```
 
-生成器会检查输入哈希、复合 key 唯一性、父子包含关系和完整 episode 内容，记录 seed 后再写出数据。遇到不同内容的已有输出会拒绝覆盖。JSON 使用稳定排序，gzip 固定时间戳；复现压缩文件哈希时应保持 Python / zlib 版本一致。
+The generator checks input hashes, composite-key uniqueness, parent–child inclusion, and complete episode content. It records the seed before writing datasets and refuses to overwrite an existing output with different content. JSON ordering is stable and gzip timestamps are fixed. Use the same Python / zlib versions to reproduce compressed-file hashes.
 
-需要排除独立 holdout 时，生成命令可增加 `--holdout <文件路径>`。生成器会拒绝与父集合重叠的 holdout，并将其从新增抽样池中排除。改变抽样条件应作为新版本保存。
+To exclude an independent holdout, add `--holdout <file-path>` to the generation command. The generator rejects a holdout that overlaps the parent subsets and excludes it from the pool for new episodes. Save changes to sampling conditions as a new version.
 
-## 如何开展导航评估
+## Run navigation evaluations
 
-先准备 B0（基线）与 candidate（候选方案）的评估程序，再按阶段推进：
+Prepare evaluation programs for B0 (the baseline) and the candidate, then proceed through these stages:
 
-| 阶段 | 运行样本 | 启动条件 |
+| Stage | Episodes to run | Entry condition |
 | --- | --- | --- |
-| Smoke | 临时 8–20 条 | 检查环境启动、输入输出、动作预算和回退 |
-| P1 | S100 | Smoke 通过 |
-| P2 | 新增 additional400 | P1 通过，方案冻结 |
-| P3 | 新增 additional500 | P2 通过，方案冻结且预算获批 |
+| Smoke | Temporary subset of 8–20 | Check environment startup, inputs/outputs, action budgets, and fallback behavior |
+| P1 | S100 | Smoke passed |
+| P2 | New additional400 | P1 passed and protocol frozen |
+| P3 | New additional500 | P2 passed, protocol frozen, and budget approved |
 
-每个 episode 都需要 B0 与 candidate 的配对结果。扩容时仅在输入、协议与哈希满足复用条件时保留父集合结果；模型、prompt 或控制器变化需要使用新协议版本。
+Every episode requires paired B0 and candidate results. Retain parent results during expansion only when inputs, protocol, and hashes satisfy reuse requirements. Changes to the model, prompt, or controller require a new protocol version.
 
-### 1. 阶段预检与启动
+### 1. Stage preflight and execution
 
-按 [运行清单 schema](schemas/run_manifest.schema.json) 准备 `artifacts/run_manifest.json`，填写数据、源码、模型、配置、seed、token 预算和外部评估命令。`command` 使用参数数组。
+Prepare `artifacts/run_manifest.json` using the [run manifest schema](schemas/run_manifest.schema.json). Specify the dataset, source code, model, configuration, seed, token budget, and external evaluation command. Represent `command` as an argument array.
 
 ```sh
-# 只检查条件，不启动导航程序
+# Validate conditions without starting the navigation program
 python -m ladder.cli stage --manifest artifacts/run_manifest.json
 
-# 检查通过后执行 manifest 中的命令
+# Execute the manifest command after validation passes
 python -m ladder.cli stage --manifest artifacts/run_manifest.json --execute
 ```
 
-工具检查输入文件哈希、当前工作目录的源码 commit、干净工作树、上阶段通过标记、冻结状态与预算。上阶段标记由实验负责人依据结果填写，工具不会自动判定实验效果达标。外部执行程序负责实际导航、结果记录和原始日志采集。
+The tool checks input file hashes, the source commit in the current working directory, a clean working tree, the previous-stage pass flag, protocol freeze status, and budget. The experiment owner sets the pass flag based on results; the tool does not automatically judge whether performance meets the acceptance criteria. The external program handles navigation, result recording, and raw logs.
 
-### 2. 缓存审计
+### 2. Cache audit
 
 ```sh
 python -m ladder.cli cache --records artifacts/cache_records.json
 ```
 
-缓存记录为 JSON 数组。每项需保留完整请求身份、`input_sha256`、`response`、`technical_error`、`fallback` 和 `cache_hit`；命中时 `reused_input_sha256` 必须一致。请求身份覆盖协议、数据、源码、模型版本、schema、prompt、媒体哈希、事件、episode、控制 epoch 和帧序列。
+Cache records form a JSON array. Each record must retain the complete request identity, `input_sha256`, `response`, `technical_error`, `fallback`, and `cache_hit`. For a hit, `reused_input_sha256` must match. Request identity covers the protocol, dataset, source code, model version, schema, prompts, media hashes, event, episode, control epoch, and frame sequence.
 
-### 3. 生成 S1000 配对报告
+### 3. Generate an S1000 paired report
 
-B0 和 candidate 结果各为一个 JSON 数组，均须恰好覆盖 S1000。单行示例：
+B0 and candidate results are separate JSON arrays, each covering exactly S1000. Example row:
 
 ```json
 {"scene_id": "scene/path.glb", "episode_id": "123", "sr": 1, "spl": 0.72, "os": 1, "ne": 1.3, "steps": 85}
 ```
 
-`sr` 为成功、`spl` 为路径效率加权成功、`os` 为轨迹是否曾到达成功范围、`ne` 为导航误差、`steps` 为步数。SR / OS 取 0 或 1，SPL 取值为 [0, 1]。
+`sr` is success, `spl` is success weighted by path efficiency, `os` indicates whether the trajectory ever entered the success region, `ne` is navigation error, and `steps` is the step count. SR / OS must be 0 or 1; SPL must be in [0, 1].
 
 ```sh
 python -m ladder.cli report --directory datasets/releases/dataset-v1 --b0 artifacts/b0.json --candidate artifacts/candidate.json --b0-manifest artifacts/b0_manifest.json --candidate-manifest artifacts/candidate_manifest.json --out artifacts/report.json
 ```
 
-两个运行清单需满足配对锁定条件，`dataset_manifest_sha256` 必须对应本次使用的 `random1000_v1.manifest.json`。
+Both run manifests must satisfy the pairing lock requirements. `dataset_manifest_sha256` must match the `random1000_v1.manifest.json` used for this report.
 
-报告分别输出 original100、additional400、additional500、combined500、combined1000 的指标均值、候选减基线的差值、配对 bootstrap 95% 区间、救回数、误伤数与成功保持率。累计集合彼此重叠，不能当作独立样本；NE / steps 的差值下降通常表示改善。
+The report includes original100, additional400, additional500, combined500, and combined1000. For each group, it reports metric means, candidate-minus-baseline differences, paired bootstrap 95% intervals, recovered successes, lost successes, and success retention. Cumulative subsets overlap and must not be treated as independent samples. Lower NE / steps differences generally indicate improvement.
 
-请求数、token、费用、失败重试、干预覆盖率、P50/P95 时延和 GPU 时间需由执行程序另行采集，汇总到 [报告模板](reports/report_template.md)。
+The execution program must separately collect request counts, tokens, costs, failed retries, intervention coverage, P50/P95 latency, and GPU time. Summarize these using the [report template](reports/report_template.md).
 
-## 文档与开发
+## Documentation and development
 
-| 内容 | 入口 |
+| Topic | Entry point |
 | --- | --- |
-| 阶梯执行协议 | [ladder_v1.md](protocols/ladder_v1.md) |
-| B0 / candidate 配对规则 | [b0_candidate_pairing.md](protocols/b0_candidate_pairing.md) |
-| Token 预算口径 | [token_budget.md](protocols/token_budget.md) |
-| 数据来源与使用说明 | [datasets/README.md](datasets/README.md) |
-| JSON 格式约定 | [schemas/](schemas/) |
-| 生成、审计与报告实现 | [ladder/](ladder/) |
+| Staged evaluation protocol | [ladder_v1.md](protocols/ladder_v1.md) |
+| B0 / candidate pairing rules | [b0_candidate_pairing.md](protocols/b0_candidate_pairing.md) |
+| Token budgeting | [token_budget.md](protocols/token_budget.md) |
+| Data provenance and usage | [datasets/README.md](datasets/README.md) |
+| JSON format contracts | [schemas/](schemas/) |
+| Generation, auditing, and reporting implementation | [ladder/](ladder/) |
 
-查看命令帮助与运行测试：
+View CLI help and run tests:
 
 ```sh
 python -m ladder.cli --help
 python -m unittest discover -s tests -v
 ```
 
-复现实验时固定数据标签 `dataset-v1` 与所用工具 commit。`protocol-v1` 标记初始工具版本，后续工具变化以具体 commit 为准。
+Pin the `dataset-v1` data tag and the tool commit used for reproducible experiments. `protocol-v1` marks the initial tool version; identify later tool changes by their specific commit.
 
-代码采用 [MIT License](LICENSE)。上游数据与场景遵循各自的许可和使用条款，来源见 [VLN-CE](https://github.com/jacobkrantz/VLN-CE)。
+Code is licensed under the [MIT License](LICENSE). Upstream datasets and scenes retain their respective licenses and terms; see [VLN-CE](https://github.com/jacobkrantz/VLN-CE) for provenance.
