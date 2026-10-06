@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "version": {
+      "const": "nested_random_episode_subset_v1"
+    },
+    "seed": {
+      "type": "integer"
+    },
+    "source_dataset": {
+      "type": "string"
+    },
+    "source_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "parent_datasets": {
+      "type": "array"
+    },
+    "output_dataset": {
+      "type": "string"
+    },
+    "output_count": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "selected_keys": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "array",
+        "minItems": 2,
+        "maxItems": 2,
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "selected_source_indices": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "integer",
+        "minimum": 0
+      }
+    },
+    "output_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    }
+  },
+  "required": [
+    "version",
+    "seed",
+    "source_dataset",
+    "source_sha256",
+    "parent_datasets",
+    "output_dataset",
+    "output_count",
+    "selected_keys",
+    "selected_source_indices",
+    "output_sha256"
+  ]
+}

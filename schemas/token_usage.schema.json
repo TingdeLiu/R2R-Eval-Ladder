@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "requests": {
+      "type": "number",
+      "minimum": 0
+    },
+    "images": {
+      "type": "number",
+      "minimum": 0
+    },
+    "input_tokens": {
+      "type": "number",
+      "minimum": 0
+    },
+    "output_tokens": {
+      "type": "number",
+      "minimum": 0
+    },
+    "technical_failures": {
+      "type": "number",
+      "minimum": 0
+    },
+    "retries": {
+      "type": "number",
+      "minimum": 0
+    },
+    "elapsed_seconds": {
+      "type": "number",
+      "minimum": 0
+    },
+    "cost": {
+      "type": "number",
+      "minimum": 0
+    },
+    "gpu_seconds": {
+      "type": "number",
+      "minimum": 0
+    },
+    "p50_latency_seconds": {
+      "type": "number",
+      "minimum": 0
+    },
+    "p95_latency_seconds": {
+      "type": "number",
+      "minimum": 0
+    },
+    "model_route": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "requests",
+    "images",
+    "input_tokens",
+    "output_tokens",
+    "technical_failures",
+    "retries",
+    "elapsed_seconds",
+    "cost",
+    "gpu_seconds",
+    "p50_latency_seconds",
+    "p95_latency_seconds",
+    "model_route"
+  ]
+}

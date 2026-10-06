@@ -1,0 +1,10 @@
+{
+  "status": "awaiting_original_frozen_inputs",
+  "source_sha256": "0e4fddca056d2e012ecc52f43a259ebddb1128503a7767b5da3b5af8ea8cf653",
+  "parent_sha256": {
+    "100": "3b80bf55c1c070e92f796a04f26f848a500acb41365d4fdb2fe6e502a4036fea",
+    "500": "19ea4ac4dd0bc513c5bcbc1f69326f556193e95b8b122ed0db8faf52db506d9f"
+  },
+  "proposed_seed": 20261006,
+  "dataset_v1_published": false
+}
